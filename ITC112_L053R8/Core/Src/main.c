@@ -75,7 +75,7 @@ enum { LOW, HIGH };
 enum { MIDDLE, UP, DOWN = 3 };
 
 uint8_t direct, gear;
-uint8_t old_mode = 0;  // store old mode
+uint8_t old_direct, old_mode = 0;  // store old mode
 
 uint8_t display_dp_flag = 0, display_disable_flag = 0, show_index = 0;
 uint8_t show_value[5] = {};
@@ -177,12 +177,20 @@ int main(void) {
     uint8_t mode = SW1_MODE;
     vol0 = adc[0] * 3300 / 4096 % 10000;
     vol1 = adc[1] * 3300 / 4096 % 10000;
-    gear = abs(26 - (int)(vol0 / 100)) % 16;
-    gear -= gear > 9 ? 1 : 0;
+
+    if (vol0 > 1800) gear = 27 - vol0 / 100;
+    else if (vol0 > 1600) gear = 9;
+    else if (vol0 > 1450) gear = 10;
+    else if (vol0 > 1300) gear = 11;
+    else if (vol0 > 1140) gear = 12;
+    else if (vol0 > 1000) gear = 13;
+    else gear = 14;
+
     direct = vol1 / 1000;  // 1 is UP, 0 is MIDDLE, 3 is DOWN
 
-    if (mode != old_mode) {
+    if (mode != old_mode || direct != old_direct) {
       old_mode = mode;
+      old_direct = direct;
       TIM21->CCR1 = 0;
       TIM22->CCR1 = TIM22->CCR2 = 0;
       SET_LED_STATE(LED2_LED | LED3_LED | LED4_LED, LOW);
@@ -229,6 +237,11 @@ int main(void) {
       case 2: {
         SET_LED_STATE(LED3_LED, direct == UP);
         SET_LED_STATE(LED4_LED, direct == DOWN);
+        SET_LED_STATE(LED2_LED, SW2);
+
+        if (direct == MIDDLE) {
+          break;
+        }
 
         if (gear == 0 && now_speed == 0) {
           // jump out emergency braking
@@ -242,8 +255,10 @@ int main(void) {
           if (gear >= 14) {
             if (now_speed < 100) acc_speed = 5;
           } else if (gear > 9) {
-            if (now_speed < (gear - 9) * 20) acc_speed = gear - 9;
-            else acc_speed = 0.5;  // 0.5%
+            int threshold = (gear - 9) * 20;
+
+            if (now_speed < threshold) acc_speed = gear - 9;
+            else if (now_speed > threshold) acc_speed = -0.5;  // -0.5%
           } else if (now_speed > 0) {
             if (gear == 0) acc_speed = -10;
             else acc_speed = gear == 0 ? -10 : -(11 - gear) * 0.5;
@@ -256,7 +271,7 @@ int main(void) {
         }
 
         // direct == MIDDLE ? 0 : now_speed
-        int _speed = now_speed;
+        int _speed = now_speed * 150 / 100;  // to duty (0~150)
         display_disable_flag = 0;
         if (gear == 0) {
           SET_DISPLAY(D_E, D_B, _speed / 100, (_speed / 10) % 10, _speed % 10);
@@ -304,7 +319,6 @@ int main(void) {
         // 32 * 1e6 / 32 / 1000 => 1kHz
         TIM22->CCR1 = direct == UP ? _speed * 10 : 0;
         TIM22->CCR2 = direct == DOWN ? _speed * 10 : 0;
-        SET_LED_STATE(LED2_LED, SW2);
       } break;
       default:
         break;

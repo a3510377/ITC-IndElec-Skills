@@ -47,8 +47,7 @@ jobs:
             cd "$base_dir" || exit
 
             echo "Processing directory $base_dir 📂"
-            echo "Processing directory: $base_dir"
-            if [ -f "platformio.ini" ]; then
+            if [ -f "platformio.ini" ] && [ -d Core/Src ]; then
               echo "Build started 🚀"
               pio run
               find .pio/build/*/ -type f \( -name "*.bin" -o -name "*.elf" \) | while read file; do

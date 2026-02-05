@@ -537,17 +537,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (SW1_Read == 0) {
       timerSW1--;
       if (timerSW1 == 0) {
-        task = (task + 1) % 2;
-
-        if (task == 0 && !timerbuzz) {
-          if ((SW1_Read == 1 && lastSW1 == 0) || (EN1_SW_Read == 1 && lastEN1 == 0) ||
-              (SW2_Read == 1 && lastSW2 == 0)) {
-            timerbuzz = 300;
-          }
-          lastSW1 = SW1_Read;
-          lastEN1 = EN1_SW_Read;
-          lastSW2 = SW2_Read;
-        }
+        task      = (task + 1) % 2;
+        timerbuzz = 300;
       }
     } else timerSW1 = 1500;
   }

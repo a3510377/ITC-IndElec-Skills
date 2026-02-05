@@ -199,3 +199,12 @@ void ssd1306_SetCursor(uint8_t x, uint8_t y) {
   SSD1306.CurrentX = x;
   SSD1306.CurrentY = y;
 }
+
+// https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf
+// 10.1.7 Set Contrast Control for BANK0 (81h)
+// This command sets the Contrast Setting of the display. The chip has 256 contrast steps from 00h to FFh. The
+// segment output current increases as the contrast step value increases.
+void ssd1306_SetBrightness(I2C_HandleTypeDef *hi2c, uint8_t brightness) {
+  ssd1306_WriteCommand(hi2c, 0x81);
+  ssd1306_WriteCommand(hi2c, brightness);
+}

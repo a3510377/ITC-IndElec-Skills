@@ -115,7 +115,7 @@ void     EEPROM_WriteUInt32(uint32_t addr, uint32_t data);
 uint32_t EEPROM_ReadUInt32(uint32_t addr);
 void     EEPROM_WriteFloat(uint32_t addr, float value);
 float    EEPROM_ReadFloat(uint32_t addr);
-void     EEPROM_Check_Upload(void);
+void     setting_update(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -213,6 +213,7 @@ int main(void) {
   freq = (int)EEPROM_ReadUInt32(EEPROM_ADDR_BZ_freq);
 
   light = (int)EEPROM_ReadUInt32(EEPROM_ADDR_OLED_contrast);
+  ssd1306_SetBrightness(&hi2c2, light * 255 / 100);
 
   set_output_voltage       = EEPROM_ReadFloat(EEPROM_ADDR_Vset);
   set_output_limit_current = EEPROM_ReadFloat(EEPROM_ADDR_Ilim);
@@ -389,7 +390,7 @@ int main(void) {
           uint32_t diff = (now - output_start_time) / 1000;
 
           ssd1306_SetCursor(85, 46);
-          sprintf(OLED_buf, "%03lu:%02lu", diff / 60, diff % 60);
+          sprintf(OLED_buf, "%lu:%02lu", (unsigned long)(diff / 60), (unsigned long)(diff % 60));
           ssd1306_WriteString(OLED_buf, Font_7x10, White);
         }
 
@@ -530,7 +531,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
       }
 
       // :> 我懶 >>
-      EEPROM_Check_Upload();
+      setting_update();
     }
     lastCLA = EN1_CLA;
 
@@ -565,7 +566,7 @@ float EEPROM_ReadFloat(uint32_t addr) {
   return value;
 }
 
-void EEPROM_Check_Upload(void) {
+void setting_update(void) {
   if (cnt > 100) cnt = 100;
   else if (cnt < 0) cnt = 0;
 
@@ -580,6 +581,8 @@ void EEPROM_Check_Upload(void) {
 
   if (set_output_voltage > 21) set_output_voltage = 21;
   else if (set_output_voltage < 0) set_output_voltage = 0;
+
+  ssd1306_SetBrightness(&hi2c2, light * 255 / 100);
 
   EEPROM_WriteUInt32(EEPROM_ADDR_BZ_state, buzz);
   EEPROM_WriteUInt32(EEPROM_ADDR_BZ_freq, freq);

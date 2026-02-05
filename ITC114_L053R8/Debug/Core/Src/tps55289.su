@@ -1,0 +1,8 @@
+../Core/Src/tps55289.c:7:19:TPS55289_Read8	32	static
+../Core/Src/tps55289.c:10:19:TPS55289_Write8	40	static
+../Core/Src/tps55289.c:14:19:TPS55289_Init	40	static
+../Core/Src/tps55289.c:33:19:TPS55289_SetIntFB	48	static
+../Core/Src/tps55289.c:59:19:TPS55289_SetVout	48	static
+../Core/Src/tps55289.c:81:19:TPS55289_SetIlimit	40	static
+../Core/Src/tps55289.c:94:19:TPS55289_EnableOut	40	static
+../Core/Src/tps55289.c:114:19:TPS55289_ReadStatus	40	static

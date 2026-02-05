@@ -1,0 +1,6 @@
+../Core/Src/tmp1075.c:23:19:TMP1075_Init	3
+../Core/Src/tmp1075.c:39:19:TMP1075_ReadRaw12	5
+../Core/Src/tmp1075.c:56:19:TMP1075_ReadTemperatureC	5
+../Core/Src/tmp1075.c:66:19:TMP1075_SetThresholdsC	9
+../Core/Src/tmp1075.c:89:19:TMP1075_ReadConfig	4
+../Core/Src/tmp1075.c:103:19:TMP1075_WriteConfig	2

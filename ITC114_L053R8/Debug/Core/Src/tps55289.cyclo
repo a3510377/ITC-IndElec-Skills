@@ -1,0 +1,8 @@
+../Core/Src/tps55289.c:7:19:TPS55289_Read8	1
+../Core/Src/tps55289.c:10:19:TPS55289_Write8	1
+../Core/Src/tps55289.c:14:19:TPS55289_Init	3
+../Core/Src/tps55289.c:33:19:TPS55289_SetIntFB	3
+../Core/Src/tps55289.c:59:19:TPS55289_SetVout	7
+../Core/Src/tps55289.c:81:19:TPS55289_SetIlimit	4
+../Core/Src/tps55289.c:94:19:TPS55289_EnableOut	3
+../Core/Src/tps55289.c:114:19:TPS55289_ReadStatus	3

@@ -1,0 +1,12 @@
+../Core/Src/ina226.c:7:19:INA226_ReadReg	2
+../Core/Src/ina226.c:18:19:INA226_WriteReg	1
+../Core/Src/ina226.c:26:19:INA226_Init	3
+../Core/Src/ina226.c:40:19:INA226_WriteConfig	1
+../Core/Src/ina226.c:53:19:INA226_SetCalibration	4
+../Core/Src/ina226.c:68:19:INA226_SetCalibrationByImax	5
+../Core/Src/ina226.c:77:19:INA226_ReadBusVoltage_mV	3
+../Core/Src/ina226.c:88:19:INA226_ReadShuntVoltage_uV	3
+../Core/Src/ina226.c:99:19:INA226_ReadCurrent_A	4
+../Core/Src/ina226.c:110:19:INA226_ReadPower_mW	3
+../Core/Src/ina226.c:122:19:INA226_ReadBusVoltage_V	3
+../Core/Src/ina226.c:131:19:INA226_ReadIDs	5
